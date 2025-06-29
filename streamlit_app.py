@@ -1,6 +1,7 @@
 import os, tempfile
 import streamlit as st
 from pathlib import Path
+Path("docs").mkdir(exist_ok=True) 
 
 from app.ingest import ingest
 from app.chat_chain import make_chain
