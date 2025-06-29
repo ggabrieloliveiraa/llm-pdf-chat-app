@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     chunk_overlap: int = 150
 
     # default chat model (Gemini‑Pro)
-    model_name: str = "gemini-1.5-flash"
+    model_name: str = "gemini-1.5-pro"
 
     model_config = ConfigDict(extra="ignore", case_sensitive=False)
 
