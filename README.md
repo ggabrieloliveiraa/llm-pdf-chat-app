@@ -1,5 +1,6 @@
 # Pré-requisitos
 Python 3.11
+
 Git
 
 # 1. clone o repositório
