@@ -1,0 +1,62 @@
+########################
+#  Linguagem / Build   #
+########################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+build/
+dist/
+
+########################
+#  Virtual envs        #
+########################
+.venv/
+venv/
+env/
+
+########################
+#  Dependências nativas #
+########################
+*.so
+*.dylib
+*.dll
+
+########################
+#  Arquivos temporários #
+########################
+*.log
+*.tmp
+*.swp
+*~
+
+########################
+#  IDEs / Editores     #
+########################
+.vscode/
+.idea/
+*.code-workspace
+
+########################
+#  Config. locais      #
+########################
+.env          
+.env.*       
+
+########################
+#  Cache / Dados gerados#
+########################
+# Índice FAISS salvo localmente
+store.faiss*        
+# Cache do Streamlit
+.streamlit/
+# Arquivos PDF carregados pelo usuário (opcional deixar fora)
+docs/*.pdf
+
+########################
+#  Sistema Operacional #
+########################
+.DS_Store
+Thumbs.db

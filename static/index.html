@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PDF Chat</title>
+  <style>
+    body{font-family:sans-serif;max-width:720px;margin:0 auto;padding:1rem}
+    #chat p{margin:.3rem 0}
+    #uploadStatus{font-size:.9rem;color:green}
+  </style>
+</head>
+<body>
+  <h1>Converse com seus PDFs</h1>
+
+  <!-- ▾ Upload de PDF ----------------------------------------- -->
+  <div>
+    <input id="pdfInput" type="file" accept="application/pdf">
+    <button id="sendPdf">Upload &amp; Indexar</button>
+    <span id="uploadStatus"></span>
+  </div>
+  <hr>
+
+  <!-- ▾ Chat --------------------------------------------------- -->
+  <div id="chat"></div>
+  <input id="q" placeholder="Pergunte" style="width:100%;padding:.5rem">
+
+<script>
+const chatDiv   = document.getElementById('chat');
+const input     = document.getElementById('q');
+const pdfInput  = document.getElementById('pdfInput');
+const sendPdf   = document.getElementById('sendPdf');
+const statusEl  = document.getElementById('uploadStatus');
+let   history   = [];
+
+/* ---------- CHAT ---------- */
+input.addEventListener('keydown', async e=>{
+  if(e.key!=='Enter') return;
+  const q=input.value.trim(); if(!q) return; input.value='';
+  chatDiv.innerHTML+=`<p><b>You:</b> ${q}</p>`;
+  const res = await fetch('/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({question:q,history})
+  });
+  const {answer} = await res.json();
+  chatDiv.innerHTML+=`<p><b>Bot:</b> ${answer}</p>`;
+  history.push([q,answer]);
+  window.scrollTo(0,document.body.scrollHeight);
+});
+
+/* -------- PDF UPLOAD ------ */
+sendPdf.addEventListener('click', async ()=>{
+  const file = pdfInput.files?.[0];
+  if(!file){ alert('Escolha um PDF.'); return; }
+
+  sendPdf.disabled = true;
+  statusEl.textContent = 'Enviando…';
+
+  const form = new FormData();
+  form.append('file', file);
+
+  try{
+    const res = await fetch('/upload', {method:'POST', body:form});
+    if(!res.ok) throw new Error(await res.text());
+    const json = await res.json();
+    statusEl.textContent = `${json.file} indexado!`;
+    statusEl.style.color = 'green';
+    // (opcional) limpe histórico se quiser isolar novos docs
+    // history = [];
+  }catch(err){
+    statusEl.textContent = 'Erro: '+err.message;
+    statusEl.style.color = 'red';
+  }finally{
+    sendPdf.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
