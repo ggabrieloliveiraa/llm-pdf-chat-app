@@ -1,6 +1,7 @@
 import os, tempfile
 import streamlit as st
 from pathlib import Path
+import google.api_core.exceptions as gexc
 Path("docs").mkdir(exist_ok=True) 
 
 from app.ingest import ingest
@@ -43,6 +44,11 @@ if st.button("Enviar") or question:
         # exibe pergunta no chat
         st.write(f"**Você:** {question}")
         # chama cadeia
-        answer = chain({"question": question, "chat_history": st.session_state.history})["answer"]
-        st.session_state.history.append((question, answer))
-        st.write(f"**Bot:** {answer}")
+        try:
+            answer = chain({"question": question, "chat_history": st.session_state.history})["answer"]
+            st.session_state.history.append((question, answer))
+            st.write(f"**Bot:** {answer}")
+        except gexc.ResourceExhausted:
+            st.error("🚦 Limite diário gratuito atingido (50 reqs). "
+                    "Tente amanhã ou use uma chave paga.\n"
+                    "Detalhes: https://ai.google.dev/gemini-api/docs/rate-limits")
