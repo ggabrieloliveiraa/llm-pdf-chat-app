@@ -4,7 +4,7 @@ Python 3.11
 Git
 
 # 1. clone o repositório
-git clone https://github.com/seu-user/llm-pdf-chat-app.git
+git clone https://github.com/ggabrieloliveiraa/llm-pdf-chat-app.git
 cd llm-pdf-chat-app
 
 # 2. crie ambiente virtual
